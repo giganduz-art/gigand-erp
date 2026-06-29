@@ -26,9 +26,9 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(api.router)
 
-FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend")
-if not os.path.exists(FRONTEND_DIR):
-    FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+LANDING_DIR = os.path.join(BASE_DIR, "landing")
 
 @app.get("/manifest.json")
 def serve_manifest():
@@ -38,11 +38,15 @@ def serve_manifest():
     return {}
 
 @app.get("/")
-def serve_frontend():
-    fp = os.path.join(FRONTEND_DIR, "index.html")
+def serve_landing():
+    fp = os.path.join(LANDING_DIR, "index.html")
     if os.path.exists(fp):
         return FileResponse(fp)
-    return {"message": "GIGAND ERP API v2.0", "docs": "/docs"}
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+
+@app.get("/erp")
+def serve_erp():
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
 
 def seed_database():

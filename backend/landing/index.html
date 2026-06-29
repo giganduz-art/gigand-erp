@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIGAND ERP — Biznesingizni bitta platformada boshqaring</title>
+<meta name="description" content="GIGAND ERP — O'zbekiston uchun professional biznes boshqaruv tizimi. Savdo, ombor, moliya, xodimlar, CRM — hammasi bir joyda.">
+<meta name="theme-color" content="#0B0D14">
+<meta property="og:title" content="GIGAND ERP — Biznes boshqaruv tizimi">
+<meta property="og:description" content="Biznesingizni bitta platformada boshqaring. Savdo, ombor, moliya, HR — hammasi avtomatlashtirilgan.">
+<meta property="og:image" content="/site/og-image.png">
+<link rel="icon" href="/site/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A031;--gold-light:#F0D48A;--gold-dark:#7A5C18;--gold-bg:rgba(201,160,49,.08);--bg:#06080E;--bg2:#0B0D14;--surface:#12141C;--card:#161822;--border:#1E2030;--text:#F0EDE6;--text2:#A09F9A;--text3:#6B6A65;--green:#4FBF9A;--red:#E05252;--blue:#4A8FE7;--purple:#9B6FE8;--radius:12px;--max:1200px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+a{color:var(--gold);text-decoration:none;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,box-shadow .3s;}
+.nav.scrolled{background:rgba(6,8,14,.95);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border);}
+.nav-inner{max-width:var(--max);margin:0 auto;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;}
+.nav-logo img{height:40px;}
+.nav-logo span{font-size:20px;font-weight:800;color:var(--gold-light);letter-spacing:1px;}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{color:var(--text2);font-size:14px;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{display:flex;gap:10px;align-items:center;}
+.btn{padding:11px 24px;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;line-height:1;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#0B0D14;box-shadow:0 4px 24px rgba(201,160,49,.25);}
+.btn-gold:hover{box-shadow:0 8px 32px rgba(201,160,49,.4);transform:translateY(-1px);}
+.btn-out{background:transparent;border:1px solid var(--border);color:var(--text2);}
+.btn-out:hover{border-color:var(--gold);color:var(--gold);}
+.btn-lg{padding:16px 36px;font-size:16px;border-radius:14px;}
+.btn i{font-size:18px;}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:120px 32px 80px;}
+.hero::before{content:'';position:absolute;top:-30%;right:-20%;width:800px;height:800px;background:radial-gradient(circle,rgba(201,160,49,.08) 0%,transparent 70%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-20%;left:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(74,143,231,.05) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:var(--max);margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gold-bg);border:1px solid rgba(201,160,49,.2);padding:8px 16px;border-radius:100px;font-size:12px;color:var(--gold);font-weight:500;margin-bottom:24px;}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero h1{font-size:52px;font-weight:800;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,var(--text) 0%,var(--gold-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{font-size:18px;color:var(--text2);line-height:1.7;margin-bottom:32px;max-width:500px;}
+.hero-actions{display:flex;gap:14px;margin-bottom:40px;}
+.hero-stats{display:flex;gap:40px;}
+.hero-stat{text-align:center;}
+.hero-stat .num{font-size:32px;font-weight:800;color:var(--gold);display:block;}
+.hero-stat .lab{font-size:12px;color:var(--text3);margin-top:2px;}
+.hero-visual{position:relative;display:flex;justify-content:center;}
+.hero-mockup{width:100%;max-width:560px;border-radius:16px;border:1px solid var(--border);box-shadow:0 40px 80px rgba(0,0,0,.5);background:var(--surface);overflow:hidden;}
+.hero-mockup img{width:100%;display:block;}
+.mockup-bar{height:36px;background:var(--bg2);display:flex;align-items:center;gap:6px;padding:0 14px;border-bottom:1px solid var(--border);}
+.mockup-dot{width:10px;height:10px;border-radius:50%;background:var(--border);}
+.mockup-screen{padding:16px;background:var(--bg);min-height:300px;font-size:11px;color:var(--text3);}
+
+/* SECTIONS */
+.section{padding:100px 32px;}
+.section-header{text-align:center;max-width:640px;margin:0 auto 60px;}
+.section-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-bg);border:1px solid rgba(201,160,49,.15);padding:6px 16px;border-radius:100px;font-size:11px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.section-header h2{font-size:40px;font-weight:800;margin-bottom:16px;line-height:1.2;}
+.section-header p{font-size:16px;color:var(--text2);line-height:1.7;}
+.container{max-width:var(--max);margin:0 auto;}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;transition:all .3s;}
+.feature-card:hover{border-color:rgba(201,160,49,.3);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+.feature-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px;}
+.fi-gold{background:rgba(201,160,49,.1);color:var(--gold);}
+.fi-green{background:rgba(79,191,154,.1);color:var(--green);}
+.fi-blue{background:rgba(74,143,231,.1);color:var(--blue);}
+.fi-purple{background:rgba(155,111,232,.1);color:var(--purple);}
+.feature-card h3{font-size:17px;font-weight:600;margin-bottom:10px;}
+.feature-card p{font-size:13px;color:var(--text3);line-height:1.6;}
+
+/* BENEFITS */
+.benefits{background:var(--bg2);}
+.benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.benefit{text-align:center;padding:32px 20px;background:var(--card);border:1px solid var(--border);border-radius:16px;transition:border .3s;}
+.benefit:hover{border-color:rgba(201,160,49,.3);}
+.benefit-num{font-size:36px;font-weight:800;color:var(--gold);margin-bottom:8px;}
+.benefit h4{font-size:14px;font-weight:600;margin-bottom:6px;}
+.benefit p{font-size:12px;color:var(--text3);}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;transition:all .3s;}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+.price-card.popular{border-color:var(--gold);box-shadow:0 0 40px rgba(201,160,49,.15);}
+.price-pop{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#0B0D14;padding:6px 20px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.price-name{font-size:14px;color:var(--text2);font-weight:500;margin-bottom:8px;}
+.price-amount{font-size:36px;font-weight:800;margin-bottom:4px;}
+.price-amount small{font-size:14px;color:var(--text3);font-weight:400;}
+.price-desc{font-size:13px;color:var(--text3);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.price-features{list-style:none;margin-bottom:28px;}
+.price-features li{font-size:13px;color:var(--text2);padding:8px 0;display:flex;align-items:center;gap:10px;}
+.price-features li i{color:var(--green);font-size:16px;}
+.price-features li.no{color:var(--text3);}
+.price-features li.no i{color:var(--text3);opacity:.3;}
+
+/* CONTACT */
+.contact{background:var(--bg2);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+.contact-info h3{font-size:28px;font-weight:700;margin-bottom:16px;}
+.contact-info p{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:32px;}
+.contact-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.contact-item i{font-size:22px;color:var(--gold);width:28px;text-align:center;}
+.contact-item span{font-size:14px;color:var(--text2);}
+.contact-item strong{display:block;font-size:15px;color:var(--text);font-weight:500;}
+.contact-form{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;}
+.contact-form h3{font-size:20px;font-weight:600;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+.contact-form h3 i{color:var(--gold);}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:500;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border .2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-success{display:none;text-align:center;padding:20px;color:var(--green);}
+.form-success i{font-size:48px;display:block;margin-bottom:12px;}
+
+/* REGISTER */
+.register{background:linear-gradient(135deg,rgba(201,160,49,.05),rgba(74,143,231,.03));}
+.register-box{max-width:600px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;}
+
+/* FOOTER */
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:60px 32px 30px;}
+.footer-inner{max-width:var(--max);margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand p{font-size:13px;color:var(--text3);line-height:1.7;margin-top:16px;}
+.footer h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:10px;}
+.footer-links a{font-size:13px;color:var(--text3);transition:color .2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);}
+.footer-social{display:flex;gap:12px;}
+.footer-social a{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:17px;transition:all .2s;}
+.footer-social a:hover{border-color:var(--gold);color:var(--gold);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;text-align:center;}
+  .hero h1{font-size:36px;}
+  .hero p{max-width:100%;}
+  .hero-actions{justify-content:center;}
+  .hero-stats{justify-content:center;}
+  .hero-visual{display:none;}
+  .features-grid{grid-template-columns:1fr 1fr;}
+  .benefits-grid{grid-template-columns:1fr 1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+}
+@media(max-width:600px){
+  .features-grid,.benefits-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:28px;}
+  .section-header h2{font-size:28px;}
+  .hamburger{display:block;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><img src="/site/logo.png" alt="GIGAND" style="height:40px;"><span>GIGAND</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Imkoniyatlar</a>
+      <a href="#benefits">Afzalliklar</a>
+      <a href="#pricing">Narxlar</a>
+      <a href="#contact">Aloqa</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#register" class="btn btn-out">Ro'yxatdan o'tish</a>
+      <a href="/erp" class="btn btn-gold"><i class="ti ti-login"></i> Kirish</a>
+    </div>
+    <button class="hamburger" onclick="document.getElementById('navLinks').style.display=this.dataset.open?'none':'flex';this.dataset.open=this.dataset.open?'':'1'"><i class="ti ti-menu-2"></i></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="dot"></span> O'zbekistonda ishlab chiqilgan</div>
+      <h1>Biznesingizni bitta platformada boshqaring</h1>
+      <p>Savdo, ombor, moliya, xodimlar, CRM — barchasini GIGAND ERP bilan avtomatlashtiring. Qog'oz ishlardan xalos bo'ling, biznesingizni o'stiring.</p>
+      <div class="hero-actions">
+        <a href="#register" class="btn btn-gold btn-lg"><i class="ti ti-rocket"></i> Bepul boshlash</a>
+        <a href="#features" class="btn btn-out btn-lg"><i class="ti ti-player-play"></i> Batafsil</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="num">500+</span><span class="lab">Mijozlar</span></div>
+        <div class="hero-stat"><span class="num">90K+</span><span class="lab">Sotuvlar</span></div>
+        <div class="hero-stat"><span class="num">24/7</span><span class="lab">Qo'llab-quvvatlash</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-mockup">
+        <div class="mockup-bar"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+        <div class="mockup-screen" style="padding:0;">
+          <div style="background:var(--surface);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);">
+            <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:var(--bg);">G</div>
+            <span style="font-size:13px;font-weight:600;color:var(--gold-light);">GIGAND ERP</span>
+          </div>
+          <div style="padding:16px;">
+            <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text);">Boshqaruv paneli</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;"><div style="font-size:10px;color:var(--text3);">Sotuv</div><div style="font-size:18px;font-weight:700;color:var(--gold);">186.9M</div></div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;"><div style="font-size:10px;color:var(--text3);">Foyda</div><div style="font-size:18px;font-weight:700;color:var(--green);">46.0M</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;"><div style="font-size:10px;color:var(--text3);">Cheklar</div><div style="font-size:18px;font-weight:700;color:var(--blue);">7,049</div></div>
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;"><div style="font-size:10px;color:var(--text3);">Marja</div><div style="font-size:18px;font-weight:700;color:var(--purple);">24.6%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge"><i class="ti ti-sparkles" style="font-size:14px;"></i> Imkoniyatlar</div>
+      <h2>Biznesingiz uchun barcha kerakli vositalar</h2>
+      <p>Bito ERP ning eng yaxshi funksiyalarini oldik, murakkab joylarini soddalashtirdik, aqlli qo'shimchalar qildik.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon fi-gold"><i class="ti ti-shopping-cart"></i></div><h3>Savdo va POS kassa</h3><p>Tezkor sotuv, shtrix-kod skanerlash, chek chop etish, nasiya savdo, chegirmalar tizimi.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-green"><i class="ti ti-building-warehouse"></i></div><h3>Ombor boshqaruvi</h3><p>Real-time qoldiq nazorati, kirim-chiqim, ko'chirish, inventarizatsiya, kam qoldiq ogohlantirish.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-blue"><i class="ti ti-cash"></i></div><h3>Moliya nazorati</h3><p>Kirim-chiqim, foyda-zarar, kassa, qarzlar, to'lovlar, valyuta kursi — hammasi nazoratda.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-purple"><i class="ti ti-users"></i></div><h3>Xodimlar (HR)</h3><p>Xodimlar ro'yxati, oylik hisoblash, KPI, davomat nazorati, GPS va selfie tekshiruv.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-gold"><i class="ti ti-address-book"></i></div><h3>Mijozlar (CRM)</h3><p>Mijozlar bazasi, sotib olish tarixi, balanslar, sodiqlik dasturi, cashback tizimi.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-green"><i class="ti ti-chart-bar"></i></div><h3>Hisobotlar va tahlil</h3><p>Sotuv, ombor, moliya, HR hisobotlari. ABC/XYZ tahlil, grafik va diagrammalar.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-blue"><i class="ti ti-truck-delivery"></i></div><h3>Xarid va ta'minot</h3><p>Xarid buyurtmalari, yetkazuvchilar, xarid qaytarish, avtomatik buyurtma yaratish.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-purple"><i class="ti ti-device-mobile"></i></div><h3>Mobil ilova</h3><p>Telefon, planshet, kompyuter — istalgan qurilmadan ishlang. Offline rejim mavjud.</p></div>
+      <div class="feature-card"><div class="feature-icon fi-gold"><i class="ti ti-brand-telegram"></i></div><h3>Telegram bot</h3><p>Davomat, hisobotlar, bildirishnomalar — Telegram bot orqali boshqaring.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section benefits" id="benefits">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge"><i class="ti ti-trophy" style="font-size:14px;"></i> Afzalliklar</div>
+      <h2>GIGAND ERP bilan biznesingiz qanday o'zgaradi</h2>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit"><div class="benefit-num">+40%</div><h4>Foyda o'sishi</h4><p>Nazorat kuchayadi, yo'qotishlar kamayadi</p></div>
+      <div class="benefit"><div class="benefit-num">3x</div><h4>Tezkor savdo</h4><p>POS kassa bilan sotuv tezlashadi</p></div>
+      <div class="benefit"><div class="benefit-num">-60%</div><h4>Qarzlar kamayadi</h4><p>Nasiya nazorati avtomatlashtirilgan</p></div>
+      <div class="benefit"><div class="benefit-num">0</div><h4>Qog'oz ish</h4><p>Hammasi raqamli, bulutda saqlangan</p></div>
+      <div class="benefit"><div class="benefit-num">24/7</div><h4>Nazorat</h4><p>Istalgan vaqt, istalgan joydan</p></div>
+      <div class="benefit"><div class="benefit-num">100%</div><h4>Ombor aniqlik</h4><p>Real-time qoldiq, hech narsa yo'qolmaydi</p></div>
+      <div class="benefit"><div class="benefit-num">1 daq</div><h4>Hisobot</h4><p>Istalgan hisobot bir daqiqada tayyor</p></div>
+      <div class="benefit"><div class="benefit-num">&infin;</div><h4>Kengayish</h4><p>Filiallar, omborlar cheksiz qo'shiladi</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge"><i class="ti ti-tag" style="font-size:14px;"></i> Narxlar</div>
+      <h2>Biznesingizga mos tarifni tanlang</h2>
+      <p>14 kun bepul sinab ko'ring. Kartangiz so'ralmaydi.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">99,000 <small>so'm/oy</small></div>
+        <div class="price-desc">Kichik biznes uchun — 1 filial, 2 xodim</div>
+        <ul class="price-features">
+          <li><i class="ti ti-check"></i> Savdo va POS kassa</li>
+          <li><i class="ti ti-check"></i> Ombor boshqaruvi</li>
+          <li><i class="ti ti-check"></i> Mijozlar bazasi</li>
+          <li><i class="ti ti-check"></i> Asosiy hisobotlar</li>
+          <li class="no"><i class="ti ti-x"></i> Moliya moduli</li>
+          <li class="no"><i class="ti ti-x"></i> HR va davomat</li>
+          <li class="no"><i class="ti ti-x"></i> Telegram bot</li>
+        </ul>
+        <a href="#register" class="btn btn-out" style="width:100%;justify-content:center;">Boshlash</a>
+      </div>
+      <div class="price-card popular">
+        <div class="price-pop">Mashhur</div>
+        <div class="price-name">Business</div>
+        <div class="price-amount" style="color:var(--gold);">249,000 <small>so'm/oy</small></div>
+        <div class="price-desc">O'rta biznes uchun — 3 filial, 10 xodim</div>
+        <ul class="price-features">
+          <li><i class="ti ti-check"></i> Savdo va POS kassa</li>
+          <li><i class="ti ti-check"></i> Ombor boshqaruvi</li>
+          <li><i class="ti ti-check"></i> Mijozlar (CRM)</li>
+          <li><i class="ti ti-check"></i> To'liq hisobotlar</li>
+          <li><i class="ti ti-check"></i> Moliya nazorati</li>
+          <li><i class="ti ti-check"></i> HR va davomat</li>
+          <li class="no"><i class="ti ti-x"></i> Telegram bot</li>
+        </ul>
+        <a href="#register" class="btn btn-gold" style="width:100%;justify-content:center;">Boshlash</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Premium</div>
+        <div class="price-amount">499,000 <small>so'm/oy</small></div>
+        <div class="price-desc">Katta biznes — cheksiz filial va xodim</div>
+        <ul class="price-features">
+          <li><i class="ti ti-check"></i> Barcha Business funksiyalar</li>
+          <li><i class="ti ti-check"></i> Cheksiz filial va xodim</li>
+          <li><i class="ti ti-check"></i> Telegram bot integratsiya</li>
+          <li><i class="ti ti-check"></i> API kirish huquqi</li>
+          <li><i class="ti ti-check"></i> Shaxsiy menejer</li>
+          <li><i class="ti ti-check"></i> Priority qo'llab-quvvatlash</li>
+          <li><i class="ti ti-check"></i> Ma'lumot eksport/import</li>
+        </ul>
+        <a href="#register" class="btn btn-out" style="width:100%;justify-content:center;">Boshlash</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge"><i class="ti ti-message" style="font-size:14px;"></i> Aloqa</div>
+      <h2>Biz bilan bog'laning</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Savollaringiz bormi?</h3>
+        <p>Biznes avtomatlashtirishni boshlamoqchimisiz? Biz sizga yordam beramiz. Bepul konsultatsiya oling.</p>
+        <div class="contact-item"><i class="ti ti-phone"></i><div><span>Telefon</span><strong>+998 91 971 2222</strong></div></div>
+        <div class="contact-item"><i class="ti ti-mail"></i><div><span>Email</span><strong>gigand.uz@gmail.com</strong></div></div>
+        <div class="contact-item"><i class="ti ti-brand-telegram"></i><div><span>Telegram</span><strong>@GigandTimeBot</strong></div></div>
+        <div class="contact-item"><i class="ti ti-map-pin"></i><div><span>Manzil</span><strong>Surxondaryo, Sherobod tumani</strong></div></div>
+      </div>
+      <div class="contact-form" id="contactForm">
+        <h3><i class="ti ti-send"></i> Xabar yuborish</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Ismingiz</label><input id="cfName" placeholder="Masalan: Sardor"></div>
+          <div class="form-group"><label>Telefon</label><input id="cfPhone" placeholder="+998 90 123 4567"></div>
+        </div>
+        <div class="form-group"><label>Biznes turi</label><select id="cfBiz"><option>Chakana savdo</option><option>Ulgurji savdo</option><option>Ishlab chiqarish</option><option>Xizmat ko'rsatish</option><option>Boshqa</option></select></div>
+        <div class="form-group"><label>Xabar</label><textarea id="cfMsg" rows="3" placeholder="Savolingizni yozing..."></textarea></div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center;" onclick="sendContact()"><i class="ti ti-send"></i> Yuborish</button>
+        <div class="form-success" id="cfSuccess"><i class="ti ti-circle-check"></i><p style="font-size:15px;font-weight:500;">Xabaringiz yuborildi!</p><p style="font-size:13px;color:var(--text3);">Tez orada siz bilan bog'lanamiz.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER -->
+<section class="section register" id="register">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge"><i class="ti ti-user-plus" style="font-size:14px;"></i> Ro'yxatdan o'tish</div>
+      <h2>14 kun bepul sinab ko'ring</h2>
+      <p>Hoziroq ro'yxatdan o'ting — biz sizga login va parol beramiz.</p>
+    </div>
+    <div class="register-box">
+      <div id="regForm">
+        <div class="form-row"><div class="form-group"><label>Ismingiz *</label><input id="regName" placeholder="To'liq ism"></div><div class="form-group"><label>Telefon *</label><input id="regPhone" placeholder="+998 ..."></div></div>
+        <div class="form-row"><div class="form-group"><label>Biznes nomi *</label><input id="regBiz" placeholder="Kompaniya nomi"></div><div class="form-group"><label>Biznes turi</label><select id="regType"><option>Chakana savdo</option><option>Ulgurji savdo</option><option>Ishlab chiqarish</option><option>Xizmat ko'rsatish</option><option>Boshqa</option></select></div></div>
+        <div class="form-group"><label>Email</label><input id="regEmail" type="email" placeholder="email@example.com"></div>
+        <div class="form-group"><label>Qo'shimcha izoh</label><textarea id="regNote" rows="2" placeholder="Biznesingiz haqida qisqacha..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none;resize:vertical;"></textarea></div>
+        <button class="btn btn-gold btn-lg" style="width:100%;justify-content:center;" onclick="sendRegister()"><i class="ti ti-rocket"></i> Ro'yxatdan o'tish</button>
+      </div>
+      <div class="form-success" id="regSuccess"><i class="ti ti-circle-check"></i><p style="font-size:18px;font-weight:600;">Arizangiz qabul qilindi!</p><p style="font-size:14px;color:var(--text3);margin-top:8px;">Tez orada siz bilan bog'lanamiz va login/parol beramiz.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo"><img src="/site/logo.png" alt="GIGAND" style="height:36px;"><span style="font-size:18px;font-weight:800;color:var(--gold-light);">GIGAND</span></a>
+        <p>GIGAND ERP — O'zbekistonda ishlab chiqilgan professional biznes boshqaruv tizimi. Patent qilingan brend.</p>
+      </div>
+      <div><h4>Sahifalar</h4><ul class="footer-links"><li><a href="#features">Imkoniyatlar</a></li><li><a href="#benefits">Afzalliklar</a></li><li><a href="#pricing">Narxlar</a></li><li><a href="#contact">Aloqa</a></li></ul></div>
+      <div><h4>Modullar</h4><ul class="footer-links"><li><a href="#">Savdo va POS</a></li><li><a href="#">Ombor</a></li><li><a href="#">Moliya</a></li><li><a href="#">HR</a></li></ul></div>
+      <div><h4>Aloqa</h4><ul class="footer-links"><li><a href="tel:+998919712222">+998 91 971 2222</a></li><li><a href="mailto:gigand.uz@gmail.com">gigand.uz@gmail.com</a></li><li><a href="#">Telegram</a></li><li><a href="#">Sherobod, Surxondaryo</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 GIGAND XOLDING. Barcha huquqlar himoyalangan.</span>
+      <div class="footer-social">
+        <a href="#"><i class="ti ti-brand-telegram"></i></a>
+        <a href="#"><i class="ti ti-brand-instagram"></i></a>
+        <a href="#"><i class="ti ti-brand-facebook"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);});
+
+async function sendContact(){
+  const name=document.getElementById('cfName').value;
+  const phone=document.getElementById('cfPhone').value;
+  if(!name||!phone){alert('Ism va telefon to\'ldiring');return;}
+  const biz=document.getElementById('cfBiz').value;
+  const msg=document.getElementById('cfMsg').value;
+  try{
+    await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,business:biz,message:msg})});
+  }catch(e){}
+  document.querySelectorAll('#contactForm .form-group, #contactForm .form-row, #contactForm .btn').forEach(el=>el.style.display='none');
+  document.getElementById('cfSuccess').style.display='block';
+}
+
+async function sendRegister(){
+  const name=document.getElementById('regName').value;
+  const phone=document.getElementById('regPhone').value;
+  const biz=document.getElementById('regBiz').value;
+  if(!name||!phone||!biz){alert('Ism, telefon va biznes nomini to\'ldiring');return;}
+  const type=document.getElementById('regType').value;
+  const email=document.getElementById('regEmail').value;
+  const note=document.getElementById('regNote').value;
+  try{
+    await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,business:biz,type,email,note})});
+  }catch(e){}
+  document.getElementById('regForm').style.display='none';
+  document.getElementById('regSuccess').style.display='block';
+}
+</script>
+</body>
+</html>

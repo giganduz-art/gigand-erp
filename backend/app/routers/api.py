@@ -306,6 +306,69 @@ def delete_product(pid: str, db: Session = Depends(get_db)):
     db.delete(p); db.commit()
     return {"ok": True}
 
+# === Contact & Register ===
+class ContactIn(BaseModel):
+    name: str
+    phone: str
+    business: str = ""
+    message: str = ""
+
+class RegisterIn(BaseModel):
+    name: str
+    phone: str
+    business: str
+    type: str = ""
+    email: str = ""
+    note: str = ""
+
+@router.post("/contact")
+def send_contact(data: ContactIn, db: Session = Depends(get_db)):
+    import json, os
+    fp = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "contacts.json")
+    entries = []
+    if os.path.exists(fp):
+        with open(fp, "r") as f:
+            try: entries = json.load(f)
+            except: pass
+    entries.append({"name": data.name, "phone": data.phone, "business": data.business, "message": data.message, "date": datetime.utcnow().isoformat()})
+    with open(fp, "w") as f:
+        json.dump(entries, f, ensure_ascii=False, indent=2)
+    return {"ok": True}
+
+@router.post("/register")
+def register_client(data: RegisterIn, db: Session = Depends(get_db)):
+    import json, os
+    fp = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "registrations.json")
+    entries = []
+    if os.path.exists(fp):
+        with open(fp, "r") as f:
+            try: entries = json.load(f)
+            except: pass
+    entries.append({"name": data.name, "phone": data.phone, "business": data.business, "type": data.type, "email": data.email, "note": data.note, "date": datetime.utcnow().isoformat(), "status": "new"})
+    with open(fp, "w") as f:
+        json.dump(entries, f, ensure_ascii=False, indent=2)
+    return {"ok": True}
+
+@router.get("/registrations")
+def get_registrations():
+    import json, os
+    fp = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "registrations.json")
+    if os.path.exists(fp):
+        with open(fp, "r") as f:
+            try: return json.load(f)
+            except: pass
+    return []
+
+@router.get("/contacts")
+def get_contacts():
+    import json, os
+    fp = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "contacts.json")
+    if os.path.exists(fp):
+        with open(fp, "r") as f:
+            try: return json.load(f)
+            except: pass
+    return []
+
 # === Stats ===
 @router.get("/stats")
 def get_stats(db: Session = Depends(get_db)):
