@@ -186,9 +186,9 @@ tbody tr:hover{background:var(--card2);}
 <body>
 <div class="login-page" id="loginPage">
   <div class="login-box">
-    <img src="/site/logo.png" alt="GIGAND" style="height:80px;margin:0 auto 16px;display:block;">
-    <h1>GIGAND ERP</h1>
-    <p>Boshqaruv tizimiga kirish</p>
+    <img src="/site/logo.png" alt="GIGAND" style="height:100px;margin:0 auto 12px;display:block;">
+    <p style="font-size:14px;color:var(--gold-200);font-weight:600;letter-spacing:2px;margin-bottom:4px;">ERP</p>
+    <p style="font-size:12px;color:var(--text3);">Boshqaruv tizimiga kirish</p>
     <div class="form-group"><label>Login</label><input id="loginUser" placeholder="Login kiriting"></div>
     <div class="form-group"><label>Parol</label><input id="loginPass" type="password" placeholder="Parol kiriting" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="btn btn-gold" style="width:100%;justify-content:center;padding:13px;font-size:14px;margin-top:8px;" onclick="doLogin()"><i class="ti ti-login"></i> Kirish</button>
@@ -205,7 +205,7 @@ tbody tr:hover{background:var(--card2);}
 </div>
 <div class="app" id="mainApp" style="display:none;">
 <div class="sidebar" id="sidebar">
-  <div class="logo-wrap" onclick="go('dashboard')"><div class="logo-icon">G</div><div class="logo-name"><b>GIGAND ERP</b><small>Boshqaruv tizimi</small></div></div>
+  <div class="logo-wrap" onclick="go('dashboard')"><img src="/site/gigand_logo.png" alt="" style="height:34px;flex-shrink:0;"><div class="logo-name"><b style="font-size:14px;font-weight:700;color:var(--gold-200);">ERP</b><small>Boshqaruv tizimi</small></div></div>
   <div class="nav-area" id="navArea"></div>
   <div class="sidebar-footer">
     <div class="nav-link" data-page="sozlamalar" onclick="go('sozlamalar')"><i class="ti ti-settings"></i><span class="st">Sozlamalar</span></div>
@@ -241,7 +241,7 @@ tbody tr:hover{background:var(--card2);}
       </div>
       <div style="position:relative;">
         <div class="avatar" id="userAvatar" onclick="toggleDrop('profDrop')">AT</div>
-        <span style="font-size:13px;font-weight:500;margin-left:6px;cursor:pointer;color:var(--text);" id="tbUserName" onclick="toggleDrop('profDrop')">GIGAND XOLDING</span>
+        <span style="font-size:13px;font-weight:500;margin-left:6px;cursor:pointer;color:var(--text);" id="tbUserName" onclick="toggleDrop('profDrop')"></span>
         <div class="dropdown" id="profDrop" style="width:220px;right:0;">
           <div class="drop-item" onclick="go('sozlamalar');closeDrop()"><i class="ti ti-user" style="font-size:17px;"></i> Profil</div>
           <div class="drop-item" onclick="changePassword()"><i class="ti ti-lock" style="font-size:17px;"></i> Parolni o'zgartirish</div>
@@ -262,7 +262,7 @@ tbody tr:hover{background:var(--card2);}
     <span class="on"><i class="ti ti-circle-check" style="font-size:13px;"></i> Tizim ishlayapti</span>
     <span id="sbInfo">Yuklanmoqda...</span>
     <span style="margin-left:auto;">Valyuta: So'm (UZS)</span>
-    <span class="gd">GIGAND ERP v2.0</span>
+    <span class="gd"><img src="/site/gigand_logo.png" style="height:14px;vertical-align:middle;margin-right:4px;">ERP v2.0</span>
   </div>
 </div>
 </div>
