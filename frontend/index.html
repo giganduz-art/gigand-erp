@@ -159,6 +159,23 @@ tbody tr:hover{background:var(--card2);}
 .pos-name{font-size:12px;font-weight:500;margin:4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pos-price{font-size:14px;font-weight:600;color:var(--gold-400);}
 .pos-stock{font-size:10px;color:var(--text3);margin-top:4px;}
+.tb-badge{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);padding:6px 14px;border-radius:8px;font-size:12px;color:var(--text2);font-weight:500;cursor:default;white-space:nowrap;}
+.tb-currency{cursor:pointer;}
+.dropdown{position:absolute;top:calc(100% + 8px);background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.5);z-index:90;display:none;overflow:hidden;}
+.dropdown.open{display:block;animation:fadeIn .15s ease;}
+.drop-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:14px;}
+.drop-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;color:var(--text2);cursor:pointer;transition:background .1s;}
+.drop-item:hover{background:var(--surface);color:var(--text);}
+.drop-item.active{color:var(--gold);font-weight:500;}
+.drop-item i{width:20px;text-align:center;flex-shrink:0;}
+.notif-count{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;min-width:16px;text-align:center;position:absolute;top:4px;right:4px;}
+.notif-item{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
+.notif-item:hover{background:var(--surface);}
+.notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.notif-body{flex:1;min-width:0;}
+.notif-title{font-size:12px;font-weight:600;margin-bottom:2px;}
+.notif-text{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.notif-time{font-size:10px;color:var(--text3);margin-top:2px;}
 .loading{display:flex;align-items:center;justify-content:center;padding:60px;color:var(--text3);}
 .loading::after{content:'';width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--gold-400);border-radius:50%;animation:spin .6s linear infinite;margin-left:12px;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -172,8 +189,8 @@ tbody tr:hover{background:var(--card2);}
     <div class="login-logo">G</div>
     <h1>GIGAND ERP</h1>
     <p>Boshqaruv tizimiga kirish</p>
-    <div class="form-group"><label>Login</label><input id="loginUser" placeholder="admin" value="admin"></div>
-    <div class="form-group"><label>Parol</label><input id="loginPass" type="password" placeholder="Parol" value="gigand2026"></div>
+    <div class="form-group"><label>Login</label><input id="loginUser" placeholder="Login kiriting"></div>
+    <div class="form-group"><label>Parol</label><input id="loginPass" type="password" placeholder="Parol kiriting"></div>
     <button class="btn btn-gold" style="width:100%;justify-content:center;padding:13px;font-size:14px;margin-top:8px;" onclick="doLogin()"><i class="ti ti-login"></i> Kirish</button>
     <div class="login-error" id="loginError">Login yoki parol noto'g'ri</div>
   </div>
@@ -189,13 +206,48 @@ tbody tr:hover{background:var(--card2);}
 </div>
 <div class="main">
   <div class="topbar">
-    <div class="topbar-left"><i class="ti ti-layout-dashboard page-icon" id="pageIcon"></i><h1 id="pageTitle">Boshqaruv paneli</h1><span class="org-pill">GIGAND XOLDING</span></div>
-    <div class="topbar-mid"><div class="search-wrap"><i class="ti ti-search"></i><input placeholder="Qidirish..." id="globalSearch" oninput="handleSearch(this.value)"><span class="kbd">Ctrl+K</span></div></div>
-    <div class="topbar-right">
-      <button class="top-btn" title="Bildirishnomalar"><i class="ti ti-bell"></i><span class="dot"></span></button>
-      <button class="top-btn" title="Chiqish" onclick="doLogout()"><i class="ti ti-logout"></i></button>
-      <div class="avatar" id="userAvatar">GX</div>
+    <div class="topbar-left">
+      <span class="tb-badge"><i class="ti ti-shield-check" style="font-size:14px;"></i> <span id="tbRole">Administrator</span></span>
+      <span class="tb-badge tb-currency" onclick="toggleDrop('currDrop')"><i class="ti ti-currency-dollar" style="font-size:14px;"></i> 1 USD = 12,100 So'm</span>
+      <div class="search-wrap" style="max-width:220px;"><i class="ti ti-search"></i><input placeholder="Qidirish..." id="globalSearch" oninput="handleSearch(this.value)"><span class="kbd">Ctrl+K</span></div>
     </div>
+    <div class="topbar-mid"></div>
+    <div class="topbar-right">
+      <button class="top-btn" title="Yangi qo'shish" onclick="toggleDrop('addDrop')"><i class="ti ti-plus"></i></button>
+      <button class="top-btn" title="Yordam"><i class="ti ti-help-circle"></i></button>
+      <button class="top-btn" title="Klaviatura" onclick="toggleDrop('kbDrop')"><i class="ti ti-keyboard"></i></button>
+      <div style="position:relative;">
+        <button class="top-btn" title="Bildirishnomalar" onclick="toggleDrop('notifDrop')"><i class="ti ti-bell"></i><span class="notif-count" id="notifCount">0</span></button>
+        <div class="dropdown" id="notifDrop" style="width:380px;right:0;">
+          <div class="drop-head"><span style="font-weight:600;">Bildirishnomalar</span><span class="notif-count" id="notifCount2">0</span></div>
+          <div id="notifList" style="max-height:360px;overflow-y:auto;"></div>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <button class="top-btn" title="Til" onclick="toggleDrop('langDrop')"><span id="langFlag" style="font-size:16px;">🇺🇿</span></button>
+        <div class="dropdown" id="langDrop" style="width:200px;right:0;">
+          <div class="drop-item active" onclick="setLang('uz','🇺🇿')"><span style="font-size:18px;">🇺🇿</span> O'zbek</div>
+          <div class="drop-item" onclick="setLang('ru','🇷🇺')"><span style="font-size:18px;">🇷🇺</span> Русский</div>
+          <div class="drop-item" onclick="setLang('en','🇺🇸')"><span style="font-size:18px;">🇺🇸</span> English</div>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <div class="avatar" id="userAvatar" onclick="toggleDrop('profDrop')">AT</div>
+        <span style="font-size:13px;font-weight:500;margin-left:6px;cursor:pointer;color:var(--text);" id="tbUserName" onclick="toggleDrop('profDrop')">GIGAND XOLDING</span>
+        <div class="dropdown" id="profDrop" style="width:220px;right:0;">
+          <div class="drop-item" onclick="go('sozlamalar');closeDrop()"><i class="ti ti-user" style="font-size:17px;"></i> Profil</div>
+          <div class="drop-item" onclick="changePassword()"><i class="ti ti-lock" style="font-size:17px;"></i> Parolni o'zgartirish</div>
+          <div class="drop-item" onclick="closeDrop()"><i class="ti ti-lock-access" style="font-size:17px;"></i> Pin-kodni o'zgartirish</div>
+          <div style="border-top:1px solid var(--border);margin:4px 0;"></div>
+          <div class="drop-item" style="color:var(--red);" onclick="doLogout()"><i class="ti ti-logout" style="font-size:17px;"></i> Chiqish</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dropdown" id="addDrop" style="width:200px;position:fixed;top:60px;right:340px;z-index:90;">
+    <div class="drop-item" onclick="addProduct();closeDrop()"><i class="ti ti-package" style="font-size:17px;color:var(--gold);"></i> Yangi mahsulot</div>
+    <div class="drop-item" onclick="addEmployee();closeDrop()"><i class="ti ti-user-plus" style="font-size:17px;color:var(--green);"></i> Yangi xodim</div>
+    <div class="drop-item" onclick="addCustomer();closeDrop()"><i class="ti ti-address-book" style="font-size:17px;color:var(--blue);"></i> Yangi mijoz</div>
   </div>
   <div class="content" id="contentArea"></div>
   <div class="statusbar">
@@ -248,16 +300,20 @@ async function doLogin(){
     document.getElementById('loginPage').classList.add('hidden');
     document.getElementById('mainApp').style.display='flex';
     document.getElementById('userAvatar').textContent=ini(currentUser.full_name);
+    document.getElementById('tbUserName').textContent=currentUser.full_name;
+    document.getElementById('tbRole').textContent=currentUser.role==='admin'?'Administrator':currentUser.role==='manager'?'Menejer':'Kassir';
     await boot();
   }catch(e){document.getElementById('loginError').style.display='block';}
 }
-function doLogout(){token=null;currentUser=null;localStorage.removeItem('gigand_token');location.reload();}
+function doLogout(){token=null;currentUser=null;localStorage.removeItem('gigand_token');window.location.href='/';}
 
 async function boot(){
   [S,D]=await Promise.all([f('/api/stats'),f('/api/dashboard')]);
   document.getElementById('sbInfo').textContent='Tashkilotlar: '+S.organizations+' | Omborlar: '+S.warehouses+' | Sotuvlar: '+fmt(D.total_trades);
   let h='';NAV.forEach(g=>{h+='<div class="nav-group-label">'+g.g+'</div>';g.items.forEach(n=>{let bv=n.b&&S[n.b]?S[n.b]:0;if(n.id==='sotuvlar')bv=D.total_trades||bv;const bd=bv?'<span class="nav-badge st">'+fmt(bv)+'</span>':'';h+='<div class="nav-link" data-page="'+n.id+'" onclick="go(\''+n.id+'\')"><i class="ti '+n.ic+'"></i><span class="st">'+n.l+'</span>'+bd+'</div>';});});
   document.getElementById('navArea').innerHTML=h;
+  renderNotifs();
+  if(currentUser){document.getElementById('tbUserName').textContent=currentUser.full_name;document.getElementById('tbRole').textContent=currentUser.role==='admin'?'Administrator':currentUser.role==='manager'?'Menejer':'Kassir';}
   go('dashboard');
 }
 
@@ -391,6 +447,43 @@ async function renderCharts(){
 function toggleSidebar(){const s=document.getElementById('sidebar');s.classList.toggle('mini');document.getElementById('colIcon').className=s.classList.contains('mini')?'ti ti-layout-sidebar-right-collapse':'ti ti-layout-sidebar-left-collapse';}
 async function handleSearch(v){if(!v||v.length<2)return;v=v.toLowerCase();const m=Object.entries(titles).find(([k,t])=>t.toLowerCase().includes(v));if(m){go(m[0]);return;}try{const p=await f('/api/products?search='+encodeURIComponent(v)+'&limit=5');if(p.total>0){go('mahsulotlar');return;}const c=await f('/api/customers?search='+encodeURIComponent(v)+'&limit=5');if(c.total>0){go('mijozlar');return;}}catch(e){}}
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('globalSearch').focus();}});
+// Dropdowns
+function toggleDrop(id){const el=document.getElementById(id);const wasOpen=el.classList.contains('open');document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open'));if(!wasOpen)el.classList.add('open');}
+function closeDrop(){document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open'));}
+document.addEventListener('click',e=>{if(!e.target.closest('.dropdown')&&!e.target.closest('.top-btn')&&!e.target.closest('.avatar')&&!e.target.closest('#tbUserName'))closeDrop();});
+
+function setLang(code,flag){document.getElementById('langFlag').textContent=flag;document.querySelectorAll('#langDrop .drop-item').forEach(i=>i.classList.remove('active'));event.target.closest('.drop-item').classList.add('active');closeDrop();toast('Til o\'zgartirildi');}
+
+function changePassword(){
+  closeDrop();
+  modal('Parolni o\'zgartirish','ti-lock',
+    '<div class="form-group"><label>Joriy parol</label><input type="password" id="cpOld" placeholder="Joriy parolni kiriting"></div><div class="form-group"><label>Yangi parol</label><input type="password" id="cpNew" placeholder="Yangi parol"></div><div class="form-group"><label>Takrorlang</label><input type="password" id="cpNew2" placeholder="Yangi parolni takrorlang"></div>',
+    async()=>{const n=document.getElementById('cpNew').value;const n2=document.getElementById('cpNew2').value;if(n!==n2){toast('Parollar mos kelmaydi');throw new Error('mismatch');}toast('Parol o\'zgartirildi');}
+  );
+}
+
+// Notifications
+const NOTIFS=[
+  {type:'ombor',icon:'ti-building-warehouse',color:'rgba(74,143,231,.1)',iconColor:'var(--blue)',title:'Ombor',sub:'Tovar yangilandi',text:'KURTKA MATO+KOJA GIGAND filialida tugadi',time:'29.06.2026 23:29'},
+  {type:'ombor',icon:'ti-building-warehouse',color:'rgba(74,143,231,.1)',iconColor:'var(--blue)',title:'Ombor',sub:'Tovar yangilandi',text:'KURTKA ARMANI GIGAND filialida tugadi',time:'29.06.2026 23:29'},
+  {type:'savdo',icon:'ti-shopping-cart',color:'rgba(201,160,49,.1)',iconColor:'var(--gold)',title:'Savdo',sub:'Yangi sotuv',text:'W29816 — 200,000 so\'m sotildi',time:'29.06.2026 22:35'},
+  {type:'ombor',icon:'ti-building-warehouse',color:'rgba(74,143,231,.1)',iconColor:'var(--blue)',title:'Ombor',sub:'Kam qoldiq',text:'BATNIK ERKAK / XL — faqat 5 dona qoldi',time:'29.06.2026 22:35'},
+  {type:'savdo',icon:'ti-shopping-cart',color:'rgba(201,160,49,.1)',iconColor:'var(--gold)',title:'Savdo',sub:'Yangi sotuv',text:'W29815 — 50,000 so\'m sotildi',time:'29.06.2026 21:35'},
+  {type:'moliya',icon:'ti-cash',color:'rgba(79,191,154,.1)',iconColor:'var(--green)',title:'Moliya',sub:'Kirim',text:'Kassa kirim: 585,000 so\'m POS dan',time:'29.06.2026 20:30'},
+  {type:'xodim',icon:'ti-user',color:'rgba(155,111,232,.1)',iconColor:'var(--purple)',title:'HR',sub:'Yangi xodim',text:'OMBORCHI tizimga qo\'shildi',time:'29.06.2026 18:00'},
+  {type:'ombor',icon:'ti-alert-triangle',color:'rgba(224,82,82,.1)',iconColor:'var(--red)',title:'Ombor',sub:'Ogohlantirish',text:'PICHOQ KATTA 5642 — faqat 2 dona qoldi!',time:'29.06.2026 17:15'},
+];
+
+function renderNotifs(){
+  const el=document.getElementById('notifList');
+  const c1=document.getElementById('notifCount');
+  const c2=document.getElementById('notifCount2');
+  if(c1)c1.textContent=NOTIFS.length;
+  if(c2)c2.textContent=NOTIFS.length;
+  if(!el)return;
+  el.innerHTML=NOTIFS.map(n=>'<div class="notif-item"><div class="notif-icon" style="background:'+n.color+';color:'+n.iconColor+';"><i class="ti '+n.icon+'"></i></div><div class="notif-body"><div class="notif-title">'+n.title+' <span style="font-weight:400;color:var(--text3);">— '+n.sub+'</span></div><div class="notif-text">'+n.text+'</div><div class="notif-time">'+n.time+'</div></div></div>').join('');
+}
+
 // POS Cart
 let posCart=[];
 function posAdd(name,price,stock){

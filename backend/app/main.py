@@ -90,7 +90,7 @@ def seed_database():
         for t in trades_data:
             db.add(Trade(id=t[0], number=t[1], uuid=t[2], total_price=t[3], debt=t[4], state="done", org_id=t[5], responsible_name=t[6], sold_at=datetime.fromisoformat(t[7])))
 
-        db.add(User(username="admin", hashed_password=hash_password("gigand2026"), full_name="GIGAND XOLDING", role="admin"))
+        db.add(User(username="Akbar", hashed_password=hash_password("Akbar aka"), full_name="Akbar Turdiyev", role="admin"))
         db.add(User(username="rustam", hashed_password=hash_password("rustam123"), full_name="Tursunov Rustam", role="manager"))
         db.add(User(username="chori", hashed_password=hash_password("chori123"), full_name="CHORI TURDIYEV", role="cashier"))
 
