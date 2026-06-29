@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GIGAND ERP — Boshqaruv tizimi</title>
+<meta name="description" content="GIGAND ERP — professional boshqaruv tizimi">
+<meta name="theme-color" content="#0B0D14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GIGAND ERP">
+<link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -250,7 +256,7 @@ function doLogout(){token=null;currentUser=null;localStorage.removeItem('gigand_
 async function boot(){
   [S,D]=await Promise.all([f('/api/stats'),f('/api/dashboard')]);
   document.getElementById('sbInfo').textContent='Tashkilotlar: '+S.organizations+' | Omborlar: '+S.warehouses+' | Sotuvlar: '+fmt(D.total_trades);
-  let h='';NAV.forEach(g=>{h+='<div class="nav-group-label">'+g.g+'</div>';g.items.forEach(n=>{const bd=n.b&&S[n.b]?'<span class="nav-badge st">'+fmt(S[n.b])+'</span>':'';h+='<div class="nav-link" data-page="'+n.id+'" onclick="go(\''+n.id+'\')"><i class="ti '+n.ic+'"></i><span class="st">'+n.l+'</span>'+bd+'</div>';});});
+  let h='';NAV.forEach(g=>{h+='<div class="nav-group-label">'+g.g+'</div>';g.items.forEach(n=>{let bv=n.b&&S[n.b]?S[n.b]:0;if(n.id==='sotuvlar')bv=D.total_trades||bv;const bd=bv?'<span class="nav-badge st">'+fmt(bv)+'</span>':'';h+='<div class="nav-link" data-page="'+n.id+'" onclick="go(\''+n.id+'\')"><i class="ti '+n.ic+'"></i><span class="st">'+n.l+'</span>'+bd+'</div>';});});
   document.getElementById('navArea').innerHTML=h;
   go('dashboard');
 }
@@ -383,7 +389,7 @@ async function renderCharts(){
 }
 
 function toggleSidebar(){const s=document.getElementById('sidebar');s.classList.toggle('mini');document.getElementById('colIcon').className=s.classList.contains('mini')?'ti ti-layout-sidebar-right-collapse':'ti ti-layout-sidebar-left-collapse';}
-function handleSearch(v){if(!v)return;v=v.toLowerCase();const m=Object.entries(titles).find(([k,t])=>t.toLowerCase().includes(v));if(m)go(m[0]);}
+async function handleSearch(v){if(!v||v.length<2)return;v=v.toLowerCase();const m=Object.entries(titles).find(([k,t])=>t.toLowerCase().includes(v));if(m){go(m[0]);return;}try{const p=await f('/api/products?search='+encodeURIComponent(v)+'&limit=5');if(p.total>0){go('mahsulotlar');return;}const c=await f('/api/customers?search='+encodeURIComponent(v)+'&limit=5');if(c.total>0){go('mijozlar');return;}}catch(e){}}
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('globalSearch').focus();}});
 // POS Cart
 let posCart=[];
@@ -410,7 +416,7 @@ async function posPay(){
   if(!posCart.length){toast('Savatcha bo\'sh!');return;}
   const total=posCart.reduce((s,i)=>s+i.price*i.qty,0);
   try{
-    await post('/api/trades',{total_price:total,responsible_name:currentUser?currentUser.full_name:'GIGAND XOLDING'});
+    await post('/api/trades',{total_price:total,responsible_name:currentUser?currentUser.full_name:'GIGAND XOLDING',items:posCart.map(i=>({name:i.name,price:i.price,qty:i.qty}))});
     toast('Sotuv amalga oshirildi! '+total.toLocaleString()+' so\'m');
     posCart=[];posRender();
     S=await f('/api/stats');D=await f('/api/dashboard');
@@ -424,10 +430,11 @@ function posFilter(v){
 }
 
 // CRUD functions
-async function delItem(path,label){
-  if(!confirm(label+' o\'chirilsinmi?'))return;
-  try{await del(path);toast(label+' o\'chirildi');S=await f('/api/stats');const pg=document.querySelector('.nav-link.on');if(pg)go(pg.dataset.page);}
-  catch(e){toast('Xatolik: '+e.message);}
+function delItem(path,label){
+  modal(label+' o\'chirish','ti-alert-triangle',
+    '<div style="text-align:center;padding:10px 0;"><i class="ti ti-alert-triangle" style="font-size:48px;color:var(--red);display:block;margin-bottom:12px;"></i><p style="font-size:15px;font-weight:500;">'+label+' o\'chirilsinmi?</p><p style="font-size:13px;color:var(--text3);margin-top:6px;">Bu amalni qaytarib bo\'lmaydi</p></div>',
+    async()=>{try{await del(path);toast(label+' o\'chirildi');S=await f('/api/stats');D=await f('/api/dashboard');const pg=document.querySelector('.nav-link.on');if(pg)go(pg.dataset.page);}catch(e){toast('Xatolik: '+e.message);}}
+  );
 }
 function addEmployee(){
   modal('Yangi xodim','ti-user-plus',

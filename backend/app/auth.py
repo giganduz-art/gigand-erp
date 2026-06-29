@@ -1,24 +1,23 @@
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
-from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from .database import get_db
 from .models import User
+import hashlib
 
 SECRET_KEY = "gigand-erp-secret-key-2026-surxondaryo"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return hashlib.sha256((password + SECRET_KEY).encode()).hexdigest()
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    return hash_password(plain) == hashed
 
 def create_token(data: dict) -> str:
     to_encode = data.copy()
@@ -33,7 +32,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         username = payload.get("sub")
         if not username:
             return None
-        user = db.query(User).filter(User.username == username).first()
-        return user
+        return db.query(User).filter(User.username == username).first()
     except JWTError:
         return None

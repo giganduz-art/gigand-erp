@@ -42,11 +42,17 @@ class WarehouseIn(BaseModel):
     is_main: bool = False
     address: str = ""
 
+class TradeItemIn(BaseModel):
+    name: str
+    price: float
+    qty: int = 1
+
 class TradeIn(BaseModel):
     total_price: float
     responsible_name: str = ""
     org_id: str = "org_1"
     debt: float = 0
+    items: list[TradeItemIn] = []
 
 class ProductIn(BaseModel):
     name: str
@@ -250,7 +256,12 @@ def create_trade(data: TradeIn, db: Session = Depends(get_db)):
     last_uuid = db.query(Trade).order_by(Trade.sold_at.desc()).first()
     uuid_num = int(last_uuid.uuid[1:]) + 1 if last_uuid else 29814
     t = Trade(id="t_"+uid(), number=num, uuid="W"+str(uuid_num), total_price=data.total_price, debt=data.debt, state="done", org_id=data.org_id, responsible_name=data.responsible_name or "GIGAND XOLDING", sold_at=datetime.utcnow())
-    db.add(t); db.commit()
+    db.add(t)
+    for item in data.items:
+        p = db.query(Product).filter(Product.name == item.name).first()
+        if p and p.stock >= item.qty:
+            p.stock -= item.qty
+    db.commit()
     return trade_dict(t)
 
 # === Products CRUD ===

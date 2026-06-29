@@ -30,6 +30,13 @@ FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__fi
 if not os.path.exists(FRONTEND_DIR):
     FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 
+@app.get("/manifest.json")
+def serve_manifest():
+    fp = os.path.join(FRONTEND_DIR, "manifest.json")
+    if os.path.exists(fp):
+        return FileResponse(fp, media_type="application/manifest+json")
+    return {}
+
 @app.get("/")
 def serve_frontend():
     fp = os.path.join(FRONTEND_DIR, "index.html")
